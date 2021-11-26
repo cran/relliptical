@@ -4,27 +4,19 @@
 \alias{mvtelliptical}
 \title{Mean and Variance for Truncated Multivariate Elliptical Distributions}
 \usage{
-mvtelliptical(
-  mean,
-  Sigma = diag(length(mean)),
-  lower = rep(-Inf, length(mean)),
-  upper = rep(Inf, length(mean)),
-  dist = "Normal",
-  nu = NULL,
-  n = 10000,
-  burn.in = 0,
-  thinning = 3
-)
+mvtelliptical(lower, upper = rep(Inf, length(lower)), mu = rep(0,
+  length(lower)), Sigma = diag(length(lower)), dist = "Normal",
+  nu = NULL, n = 10000, burn.in = 0, thinning = 3)
 }
 \arguments{
-\item{mean}{numeric vector of length \eqn{p} representing the location parameter.}
-
-\item{Sigma}{numeric positive definite matrix with dimension \eqn{pxp} representing the
-scale parameter.}
-
 \item{lower}{vector of lower truncation points of length \eqn{p}.}
 
 \item{upper}{vector of upper truncation points of length \eqn{p}.}
+
+\item{mu}{numeric vector of length \eqn{p} representing the location parameter.}
+
+\item{Sigma}{numeric positive definite matrix with dimension \eqn{pxp} representing the
+scale parameter.}
 
 \item{dist}{represents the truncated distribution to be used. The values are \code{Normal},
 \code{t}, \code{PE}, \code{PVII}, \code{Slash} and \code{CN} for the truncated Normal, Student-t,
@@ -46,18 +38,19 @@ It returns a list with three elements:
 \item{VarY}{the variance-covariance matrix of dimensions \eqn{pxp}.}
 }
 \description{
-This function approximates the mean vector and variance-covariance matrix for some particular truncated elliptical distributions
-through Monte Carlo integration for the truncated variables and using properties of the conditional expectation for
-the non-truncated variables. It supports the p-variate Normal (\code{Normal}), Student-t (\code{t}), Power Exponential (\code{PE}),
-Pearson VII (\code{PVII}), Slash (\code{Slash}), and Contaminated Normal (\code{CN}) distribution.
+This function approximates the mean vector and variance-covariance matrix for some specific truncated elliptical distributions.
+The argument \code{dist} sets the distribution to be used and accepts the same values \code{Normal},
+\code{t}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the truncated Normal, Student-t, Power Exponential,
+Pearson VII, Slash, and Contaminated Normal distributions, respectively. Moments are computed through Monte Carlo method for
+the truncated variables and using properties of the conditional expectation for the non-truncated variables.
 }
 \details{
 This function also considers the univariate case. The argument \code{nu} is a parameter
 or vector of parameters depending on the density generating function (DGF). For the truncated
 Student-t, Power Exponential, and Slash distribution, \code{nu} is a positive number.
-For the truncated Pearson VII, \code{nu} is a vector with the first
-element greater than \eqn{p/2} and the second element a positive number. For the truncated Contaminated Normal
-distribution, \code{nu} is a vector of length 2 assuming values between 0 and 1.
+For the truncated Pearson VII, \code{nu} is a vector with the first element greater than \eqn{p/2}
+and the second element a positive number. For the truncated Contaminated Normal distribution, \code{nu}
+is a vector of length 2 assuming values between 0 and 1.
 }
 \note{
 The Normal distribution is a particular case of the Power Exponential distribution when \code{nu = 1}.
@@ -71,30 +64,30 @@ For Pearson VII distribution, the algorithm supports values of \code{m <= (p+2)/
 \examples{
 # Truncated Student-t distribution
 set.seed(5678)
-mean = c(0.1, 0.2, 0.3)
-Sigma = matrix(data = c(1,0.2,0.3,0.2,1,0.4,0.3,0.4,1),
-               nrow=length(mean), ncol=length(mean), byrow=TRUE)
+mu = c(0.1, 0.2, 0.3)
+Sigma = matrix(data = c(1,0.2,0.3,0.2,1,0.4,0.3,0.4,1), nrow=length(mu),
+               ncol=length(mu), byrow=TRUE)
 
 # Example 1: considering nu = 0.80 and one doubly truncated variable
 a = c(-0.8, -Inf, -Inf)
 b = c(0.5, 0.6, Inf)
-MC11 = mvtelliptical(mean, Sigma, a, b, "t", 0.80)
+MC11 = mvtelliptical(a, b, mu, Sigma, "t", 0.80)
 
 # Example 2: considering nu = 0.80 and two doubly truncated variables
 a = c(-0.8, -0.70, -Inf)
 b = c(0.5, 0.6, Inf)
-MC12 = mvtelliptical(mean, Sigma, a, b, "t", 0.80) # By default n=1e4
+MC12 = mvtelliptical(a, b, mu, Sigma, "t", 0.80) # By default n=1e4
 
 # Truncated Pearson VII distribution
 set.seed(9876)
-MC21 = mvtelliptical(mean, Sigma, a, b, "PVII", c(1.90,0.80), n=1e6) # More precision
+MC21 = mvtelliptical(a, b, mu, Sigma, "PVII", c(1.90,0.80), n=1e6) # More precision
 c(MC12$EY); c(MC21$EY)
 MC12$VarY;  MC21$VarY
 
 # Truncated Normal distribution
 set.seed(1234)
-MC31 = mvtelliptical(mean, Sigma, a, b, "Normal", n=1e4)
-MC32 = mvtelliptical(mean, Sigma, a, b, "Normal", n=1e6) # More precision
+MC31 = mvtelliptical(a, b, mu, Sigma, "Normal", n=1e4)
+MC32 = mvtelliptical(a, b, mu, Sigma, "Normal", n=1e6) # More precision
 }
 \references{
 {

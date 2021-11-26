@@ -4,25 +4,15 @@
 \alias{rtelliptical}
 \title{Sampling Random Numbers from Truncated Multivariate Elliptical Distributions}
 \usage{
-rtelliptical(
-  n = 10000,
-  mean,
-  Sigma = diag(length(mean)),
-  lower = rep(-Inf, length(mean)),
-  upper = rep(Inf, length(mean)),
-  dist = "Normal",
-  nu = NULL,
-  expr = "exp(1)^(-t)/(1+exp(1)^(-t))^2",
-  gFun = NULL,
-  ginvFun = NULL,
-  burn.in = 0,
-  thinning = 1
-)
+rtelliptical(n = 10000, mu = rep(0, length(lower)),
+  Sigma = diag(length(lower)), lower, upper = rep(Inf, length(lower)),
+  dist = "Normal", nu = NULL, expr = NULL, gFun = NULL,
+  ginvFun = NULL, burn.in = 0, thinning = 1)
 }
 \arguments{
 \item{n}{number of observations to generate. Must be an integer >= 1.}
 
-\item{mean}{numeric vector of length \eqn{p} representing the location parameter.}
+\item{mu}{numeric vector of length \eqn{p} representing the location parameter.}
 
 \item{Sigma}{numeric positive definite matrix with dimension \eqn{pxp} representing the
 scale parameter.}
@@ -53,31 +43,36 @@ density generating function. See Details.}
 It returns a matrix of dimensions \eqn{nxp} with the random points sampled.
 }
 \description{
-This function generates random numbers from a truncated multivariate elliptical distribution
-with location parameter equal to \code{mean}, scale matrix \code{Sigma}, lower and upper
+This function generates observations from a truncated multivariate elliptical distribution
+with location parameter \code{mu}, scale matrix \code{Sigma}, lower and upper
 truncation points \code{lower} and \code{upper} via Slice Sampling algorithm with Gibbs sampler steps.
 }
 \details{
+The \code{dist} argument represents the truncated distribution to be used. The values are
+\code{Normal}, \code{t}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the
+truncated Normal, Student-t, Power Exponential, Pearson VII, Slash and Contaminated Normal distributions,
+respectively.
+
 The argument \code{nu} is a parameter or vector of parameters depending on the density generating
 function (DGF). For the truncated Student-t, Power Exponential, and Slash distribution, \code{nu} is a
-positive number. For the truncated Pearson VII,
-\code{nu} is a vector with the first element greater than \eqn{p/2} and the second element a positive number.
-For the truncated Contaminated Normal distribution, \code{nu} is a vector of length 2 assuming values between 0 and 1.
+positive number. For the truncated Pearson VII, \code{nu} is a vector with the first element greater than
+\eqn{p/2} and the second element a positive number. For the truncated Contaminated Normal distribution,
+\code{nu} is a vector of length 2 assuming values between 0 and 1.
 
-This function also allows us to generate random points from other truncated elliptical distributions by specifying
-the DGF through arguments \code{expr} or \code{gFun} and making \code{dist} equal to \code{NULL}.
-The DGF must be non-negative and strictly decreasing on the interval \code{(0, Inf)}.
-The DGF is given as a character to argument \code{expr}. The notation used in \code{expr} needs to be
-understood by package \code{Ryacas0} and the environment of R. For example if the DGF is \eqn{g(t)=e^{-t}}, then
-\code{expr="exp(1)^(-t)"}. In this case, the algorithm tries to compute a closed expression for the inverse function
-of \eqn{g(t)}, a warning message is returned when it is not possible. Additionally, the function in \code{expr} should
-depend only on variable \eqn{t}, and any additional parameter must be a fixed value.
-Argument \code{gFun} can be accessed when \code{expr='NULL'}. It accepts the DGF as an R function.
-The inverse of the function defined in \code{gFun} can be provided as an R function through \code{ginvFun}.
-If \code{ginvFun='NULL'}, then the inverse of \code{gFun} is approximated numerically.
-In the examples, we show how to use \code{expr} and \code{gFun} to draw samples from the bivariate truncated Logistic
-and Kotz-type distributions. Note that the DGF of Kotz-type distribution is strictly decreasing for values of \eqn{N} between
-(2-p)/2 and 1, see \insertCite{fang2018symmetric;textual}{relliptical}.
+This function also allows generating random numbers from other truncated elliptical distributions not specified
+in the \code{dist} argument, by supplying the density generating function (DGF) through arguments either
+\code{expr} or \code{gFun}. The DGF must be a non-negative and strictly decreasing function on \code{(0, Inf)}.
+The easiest way is to provide the DGF expression to argument \code{expr} as a character. The notation used in
+\code{expr} needs to be understood by package \code{Ryacas0}, and the environment of \code{R}. For instance,
+for the DGF \eqn{g(t)=e^{-t}}, the user must provide \code{expr = "exp(1)^(-t)"}. See that the function must depend
+only on variable \eqn{t}, and any additional parameter must be passed as a fixed value. For this case, when a character
+expression is provided to \code{expr}, the algorithm tries to compute a closed-form expression for the inverse function
+of \eqn{g(t)}, however, this is not always possible (a warning message is returned). See example 2.
+
+If it was no possible to generate random samples by passing a character expression to \code{expr}, the user may provide
+a custom \code{R} function to the \code{gFun} argument. By default, its inverse function is approximated numerically,
+however, the user may also provide its inverse to the \code{ginvFun} argument to gain some computational time.
+When \code{gFun} is provided, arguments \code{dist} and \code{expr} are ignored.
 }
 \note{
 The Normal distribution is a particular case of the Power Exponential distribution when \code{nu = 1}.
@@ -91,11 +86,11 @@ library(gridExtra)
 
 # Example 1: Sampling from the Truncated Normal distribution
 set.seed(1234)
-mean  = c(0, 1)
+mu  = c(0, 1)
 Sigma = matrix(c(1,0.70,0.70,3), 2, 2)
 lower = c(-2, -3)
 upper = c(3, 3)
-sample1 = rtelliptical(5e4, mean, Sigma, lower, upper, dist="Normal")
+sample1 = rtelliptical(5e4, mu, Sigma, lower, upper, dist="Normal")
 
 # Histogram and density for variable 1
 ggplot(data.frame(sample1), aes(x=X1)) +
@@ -107,7 +102,7 @@ ggplot(data.frame(sample1), aes(x=X2)) +
    geom_histogram(aes(y=..density..), colour="black", fill="grey", bins=15) +
    geom_density(color="red") + labs(x=bquote(X[2]), y="Density")
 
-
+\donttest{
 # Example 2: Sampling from the Truncated Logistic distribution
 
 # Function for plotting the sample autocorrelation using ggplot2
@@ -123,27 +118,31 @@ acf.plot = function(samples){
 }
 
 set.seed(5678)
-mean  = c(0, 0)
+mu  = c(0, 0)
 Sigma = matrix(c(1,0.70,0.70,1), 2, 2)
 lower = c(-2, -2)
 upper = c(3, 2)
 # Sample autocorrelation with no thinning
-sample2 = rtelliptical(1000, mean, Sigma, lower, upper, dist=NULL,
-                       expr="exp(1)^(-t)/(1+exp(1)^(-t))^2")
+sample2 = rtelliptical(10000, mu, Sigma, lower, upper, expr="exp(1)^(-t)/(1+exp(1)^(-t))^2")
 grid.arrange(grobs=acf.plot(sample2), top="Logistic distribution with no thinning", nrow=1)
 
 # Sample autocorrelation with thinning = 3
-sample3 = rtelliptical(1000, mean, Sigma, lower, upper, dist=NULL,
-                       expr="exp(1)^(-t)/(1+exp(1)^(-t))^2", thinning=3)
+sample3 = rtelliptical(10000, mu, Sigma, lower, upper, expr="exp(1)^(-t)/(1+exp(1)^(-t))^2",
+                       thinning=3)
 grid.arrange(grobs=acf.plot(sample3), top="Logistic distribution with thinning = 3", nrow=1)
-
+}
 
 # Example 3: Sampling from the Truncated Kotz-type distribution
-sample4 = rtelliptical(1500, mean, Sigma, lower, upper, dist=NULL, expr=NULL,
-                       gFun=function(t){ t^(-1/2)*exp(-2*t^(1/4)) })
+set.seed(5678)
+mu  = c(0, 0)
+Sigma = matrix(c(1,-0.5,-0.5,1), 2, 2)
+lower = c(-2, -2)
+upper = c(3, 2)
+sample4 = rtelliptical(2000, mu, Sigma, lower, upper, gFun=function(t){t^(-1/2)*exp(-2*t^(1/4))})
 f1 = ggplot(data.frame(sample4), aes(x=X1,y=X2)) + geom_point(size=0.50) +
      labs(x=expression(X[1]), y=expression(X[2]), subtitle="Kotz(2,1/4,1/2)")
 ggMarginal(f1, type="histogram", fill="grey")
+
 }
 \references{
 {
