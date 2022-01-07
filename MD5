@@ -1,11 +1,11 @@
-a4f3a49b7d7684c87f100f2b6807a399 *DESCRIPTION
-5807014d0dfd91856f421816db9ecb61 *NAMESPACE
-f043bce49c6f3d869ead2c7374dfce39 *R/Compute_Moments.R
+3dc8cac3b9e06c464eb5aea5336375e6 *DESCRIPTION
+35d5f9f10144ba4d331873ed5c89ade1 *NAMESPACE
+4aaf43564006e72ba6df632bb4e9d653 *R/Compute_Moments.R
 eec8da6bd99cb2eece76d3dcdf3d0872 *R/Random_Numbers.R
 ec3ffd1e76d09e8650a2fc9417443571 *R/RcppExports.R
 30f04a1542808ebcf7ebdfaf56ec0bf7 *R/relliptical-package.R
 2cecd8a2be8a14d13bc65b7bde4efcdf *README.md
-de2cd56aaa2aee09bde6122c02f16d14 *build/partial.rdb
+bd0c8d9bf3457f045bfe74c643a65999 *build/partial.rdb
 be86014690bdaf403a00beaef48bdc76 *inst/REFERENCES.bib
 16ec0d86a28fd9cc321cca4a30610e0d *man/figures/README-example1-1.png
 5c947a9277fdd19c4a7a4f3277399f18 *man/figures/README-example2.0-1.png
@@ -15,7 +15,7 @@ be86014690bdaf403a00beaef48bdc76 *inst/REFERENCES.bib
 79d9c9fb76e1e09512d8a2b9c5cde3b5 *man/figures/README-example4-1.png
 2472df9d69ff9e989536d18cebe0b661 *man/mvtelliptical.Rd
 38bdc75246251210c8b8feb0684f8495 *man/rtelliptical.Rd
-6c0ed0245ef09a8f008b61016147d12d *src/Functions.cpp
+e4aa05ef8a7f5446cd2bfc292093558a *src/Functions.cpp
 e4a9a47c4a3aca98677ab8b16336e5de *src/Makevars
 e4a9a47c4a3aca98677ab8b16336e5de *src/Makevars.win
-9b503a8219550d851d34f7275e021d18 *src/RcppExports.cpp
+028eea4e3258a64633baf45496fdacc7 *src/RcppExports.cpp

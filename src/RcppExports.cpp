@@ -2,7 +2,6 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include <RcppArmadillo.h>
-#include <RcppEigen.h>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -13,17 +12,17 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // rttrunc
-arma::mat rttrunc(arma::uword n, double nu, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, int burn, int lag);
+arma::mat rttrunc(int n, double nu, const arma::vec mu, const arma::mat Sigma, const arma::vec a, const arma::vec b, int burn, int lag);
 RcppExport SEXP _relliptical_rttrunc(SEXP nSEXP, SEXP nuSEXP, SEXP muSEXP, SEXP SigmaSEXP, SEXP aSEXP, SEXP bSEXP, SEXP burnSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type b(bSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     rcpp_result_gen = Rcpp::wrap(rttrunc(n, nu, mu, Sigma, a, b, burn, lag));
@@ -31,16 +30,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // rtnormal
-arma::mat rtnormal(arma::uword n, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, int burn, int lag);
+arma::mat rtnormal(int n, const arma::vec mu, const arma::mat Sigma, const arma::vec a, const arma::vec b, int burn, int lag);
 RcppExport SEXP _relliptical_rtnormal(SEXP nSEXP, SEXP muSEXP, SEXP SigmaSEXP, SEXP aSEXP, SEXP bSEXP, SEXP burnSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type b(bSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     rcpp_result_gen = Rcpp::wrap(rtnormal(n, mu, Sigma, a, b, burn, lag));
@@ -48,17 +47,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // rtPE
-arma::mat rtPE(arma::uword n, double beta, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, int burn, int lag);
+arma::mat rtPE(int n, const double beta, const arma::vec mu, const arma::mat Sigma, const arma::vec a, const arma::vec b, int burn, int lag);
 RcppExport SEXP _relliptical_rtPE(SEXP nSEXP, SEXP betaSEXP, SEXP muSEXP, SEXP SigmaSEXP, SEXP aSEXP, SEXP bSEXP, SEXP burnSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type b(bSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     rcpp_result_gen = Rcpp::wrap(rtPE(n, beta, mu, Sigma, a, b, burn, lag));
@@ -66,18 +65,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // rtPVII
-arma::mat rtPVII(arma::uword n, double N, double nu, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, int burn, int lag);
+arma::mat rtPVII(int n, const double N, const double nu, const arma::vec mu, const arma::mat Sigma, const arma::vec a, const arma::vec b, int burn, int lag);
 RcppExport SEXP _relliptical_rtPVII(SEXP nSEXP, SEXP NSEXP, SEXP nuSEXP, SEXP muSEXP, SEXP SigmaSEXP, SEXP aSEXP, SEXP bSEXP, SEXP burnSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type N(NSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type N(NSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type b(bSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     rcpp_result_gen = Rcpp::wrap(rtPVII(n, N, nu, mu, Sigma, a, b, burn, lag));
@@ -85,17 +84,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // rtslash
-arma::mat rtslash(arma::uword n, double nu, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, int burn, int lag);
+arma::mat rtslash(int n, const double nu, const arma::vec mu, const arma::mat Sigma, const arma::vec a, const arma::vec b, int burn, int lag);
 RcppExport SEXP _relliptical_rtslash(SEXP nSEXP, SEXP nuSEXP, SEXP muSEXP, SEXP SigmaSEXP, SEXP aSEXP, SEXP bSEXP, SEXP burnSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type b(bSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     rcpp_result_gen = Rcpp::wrap(rtslash(n, nu, mu, Sigma, a, b, burn, lag));
@@ -103,18 +102,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // rtCN
-arma::mat rtCN(arma::uword n, double nu, double rho, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, int burn, int lag);
+arma::mat rtCN(int n, const double nu, const double rho, const arma::vec mu, const arma::mat Sigma, const arma::vec a, const arma::vec b, int burn, int lag);
 RcppExport SEXP _relliptical_rtCN(SEXP nSEXP, SEXP nuSEXP, SEXP rhoSEXP, SEXP muSEXP, SEXP SigmaSEXP, SEXP aSEXP, SEXP bSEXP, SEXP burnSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const double >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type b(bSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     rcpp_result_gen = Rcpp::wrap(rtCN(n, nu, rho, mu, Sigma, a, b, burn, lag));
@@ -122,12 +121,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // randomG
-arma::mat randomG(arma::uword n, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, Function gFUN, Function ginvFUN, int burn, int lag);
+arma::mat randomG(int n, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b, Function gFUN, Function ginvFUN, int burn, int lag);
 RcppExport SEXP _relliptical_randomG(SEXP nSEXP, SEXP muSEXP, SEXP SigmaSEXP, SEXP aSEXP, SEXP bSEXP, SEXP gFUNSEXP, SEXP ginvFUNSEXP, SEXP burnSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type a(aSEXP);
@@ -141,17 +140,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // Tmoment
-List Tmoment(arma::vec mu, arma::mat Sigma, double nu, arma::vec lower, arma::vec upper, arma::uword n, int burn, int thinning);
+Rcpp::List Tmoment(const arma::vec mu, const arma::mat Sigma, const double nu, const arma::vec lower, const arma::vec upper, int n, int burn, int thinning);
 RcppExport SEXP _relliptical_Tmoment(SEXP muSEXP, SEXP SigmaSEXP, SEXP nuSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nSEXP, SEXP burnSEXP, SEXP thinningSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type thinning(thinningSEXP);
     rcpp_result_gen = Rcpp::wrap(Tmoment(mu, Sigma, nu, lower, upper, n, burn, thinning));
@@ -159,16 +158,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // Nmoment
-List Nmoment(arma::vec mu, arma::mat Sigma, arma::vec lower, arma::vec upper, arma::uword n, int burn, int thinning);
+Rcpp::List Nmoment(const arma::vec mu, const arma::mat Sigma, const arma::vec lower, const arma::vec upper, int n, int burn, int thinning);
 RcppExport SEXP _relliptical_Nmoment(SEXP muSEXP, SEXP SigmaSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nSEXP, SEXP burnSEXP, SEXP thinningSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type thinning(thinningSEXP);
     rcpp_result_gen = Rcpp::wrap(Nmoment(mu, Sigma, lower, upper, n, burn, thinning));
@@ -176,17 +175,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // PEmoment
-List PEmoment(arma::vec mu, arma::mat Sigma, double beta, arma::vec lower, arma::vec upper, arma::uword n, int burn, int thinning);
+Rcpp::List PEmoment(const arma::vec mu, const arma::mat Sigma, const double beta, const arma::vec lower, const arma::vec upper, int n, int burn, int thinning);
 RcppExport SEXP _relliptical_PEmoment(SEXP muSEXP, SEXP SigmaSEXP, SEXP betaSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nSEXP, SEXP burnSEXP, SEXP thinningSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type thinning(thinningSEXP);
     rcpp_result_gen = Rcpp::wrap(PEmoment(mu, Sigma, beta, lower, upper, n, burn, thinning));
@@ -194,18 +193,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // PVIImoment
-List PVIImoment(arma::vec mu, arma::mat Sigma, double N, double nu, arma::vec lower, arma::vec upper, arma::uword n, int burn, int thinning);
+Rcpp::List PVIImoment(const arma::vec mu, const arma::mat Sigma, const double N, const double nu, const arma::vec lower, const arma::vec upper, int n, int burn, int thinning);
 RcppExport SEXP _relliptical_PVIImoment(SEXP muSEXP, SEXP SigmaSEXP, SEXP NSEXP, SEXP nuSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nSEXP, SEXP burnSEXP, SEXP thinningSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type N(NSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type N(NSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type thinning(thinningSEXP);
     rcpp_result_gen = Rcpp::wrap(PVIImoment(mu, Sigma, N, nu, lower, upper, n, burn, thinning));
@@ -213,17 +212,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // Slashmoment
-List Slashmoment(arma::vec mu, arma::mat Sigma, double nu, arma::vec lower, arma::vec upper, arma::uword n, int burn, int thinning);
+Rcpp::List Slashmoment(const arma::vec mu, const arma::mat Sigma, const double nu, const arma::vec lower, const arma::vec upper, int n, int burn, int thinning);
 RcppExport SEXP _relliptical_Slashmoment(SEXP muSEXP, SEXP SigmaSEXP, SEXP nuSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nSEXP, SEXP burnSEXP, SEXP thinningSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type thinning(thinningSEXP);
     rcpp_result_gen = Rcpp::wrap(Slashmoment(mu, Sigma, nu, lower, upper, n, burn, thinning));
@@ -231,18 +230,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // CNmoment
-List CNmoment(arma::vec mu, arma::mat Sigma, double nu, double rho, arma::vec lower, arma::vec upper, arma::uword n, int burn, int thinning);
+Rcpp::List CNmoment(const arma::vec mu, const arma::mat Sigma, const double nu, const double rho, const arma::vec lower, const arma::vec upper, int n, int burn, int thinning);
 RcppExport SEXP _relliptical_CNmoment(SEXP muSEXP, SEXP SigmaSEXP, SEXP nuSEXP, SEXP rhoSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nSEXP, SEXP burnSEXP, SEXP thinningSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Sigma(SigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< arma::uword >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type Sigma(SigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const double >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< int >::type thinning(thinningSEXP);
     rcpp_result_gen = Rcpp::wrap(CNmoment(mu, Sigma, nu, rho, lower, upper, n, burn, thinning));

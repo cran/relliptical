@@ -80,7 +80,6 @@
 #' }
 #'
 #' @import Ryacas0
-#' @import RcppNumerical
 #' @importFrom FuzzyNumbers.Ext.2 is.decreasing
 #' @importFrom matrixcalc is.positive.definite is.symmetric.matrix
 #' @importFrom stats qchisq uniroot
