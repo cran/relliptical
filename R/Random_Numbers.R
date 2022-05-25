@@ -6,13 +6,13 @@
 #'
 #' @param n number of observations to generate. Must be an integer >= 1.
 #' @param mu numeric vector of length \eqn{p} representing the location parameter.
-#' @param Sigma numeric positive definite matrix with dimension \eqn{pxp} representing the
+#' @param Sigma numeric positive definite matrix with dimension \eqn{p}x\eqn{p} representing the
 #' scale parameter.
 #' @param lower vector of lower truncation points of length \eqn{p}.
 #' @param upper vector of upper truncation points of length \eqn{p}.
-#' @param dist represents the truncated distribution to be used. The values are \code{Normal},
-#' \code{t}, \code{PE}, \code{PVII}, \code{Slash} and \code{CN} for the truncated Normal, Student-t,
-#' Power Exponential, Pearson VII, Slash and Contaminated Normal distributions, respectively.
+#' @param dist represents the truncated distribution to be used. The values are \code{'Normal'},
+#' \code{'t'}, \code{'PE'}, \code{'PVII'}, \code{'Slash'}, and \code{'CN'} for the truncated Normal, Student-t,
+#' Power Exponential, Pearson VII, Slash, and Contaminated Normal distribution, respectively.
 #' @param nu additional parameter or vector of parameters depending on the
 #' density generating function. See Details.
 #' @param expr a character with the density generating function. See Details.
@@ -24,7 +24,7 @@
 #'
 #' @details The \code{dist} argument represents the truncated distribution to be used. The values are
 #' \code{Normal}, \code{t}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the
-#' truncated Normal, Student-t, Power Exponential, Pearson VII, Slash and Contaminated Normal distributions,
+#' truncated Normal, Student-t, Power Exponential, Pearson VII, Slash, and Contaminated Normal distribution,
 #' respectively.
 #'
 #' The argument \code{nu} is a parameter or vector of parameters depending on the density generating
@@ -52,7 +52,7 @@
 #' The Student-t distribution with \eqn{\nu} degrees of freedom results from the Pearson VII
 #' distribution when \code{nu = } ((\eqn{\nu}+p)/2, \eqn{\nu}).
 #'
-#' @return It returns a matrix of dimensions \eqn{nxp} with the random points sampled.
+#' @return It returns a matrix of dimensions \eqn{n}x\eqn{p} with the random points sampled.
 #'
 #' @author Katherine L. Valeriano, Christian E. Galarza and Larissa A. Matos
 #'
@@ -129,6 +129,10 @@
 #'   \insertRef{ho2012some}{relliptical}
 #'
 #'   \insertRef{neal2003slice}{relliptical}
+#'
+#'   \insertRef{robert2010introducing}{relliptical}
+#'
+#'   \insertRef{valeriano2021moments}{relliptical}
 #' }
 
 
@@ -176,7 +180,7 @@ rtelliptical = function(n=1e4, mu=rep(0,length(lower)), Sigma=diag(length(lower)
   # Generating random numbers
   # ----------------------------------------------------------------------------
   # Validation of gFun
-  if (class(gFun)=="function"){
+  if (is(gFun,"function")){
     p = length(c(mu))
     quant = qchisq(0.999,df=p)
     g_fun2 = gFun
@@ -184,7 +188,7 @@ rtelliptical = function(n=1e4, mu=rep(0,length(lower)), Sigma=diag(length(lower)
     if (g_fun2(quant) < 0) stop ("gFun must be a non-negative function")
 
     # Validation of ginvFun
-    if (class(ginvFun)=="function"){
+    if (is(ginvFun,"function")){
       g_inv2 = ginvFun
       eval2 = g_fun2(quant)
       if (!is.decreasing(g_inv2, x.bound=c(0,eval2), step=eval2/10)) stop ("ginvFun must be a decreasing function")
@@ -215,7 +219,7 @@ rtelliptical = function(n=1e4, mu=rep(0,length(lower)), Sigma=diag(length(lower)
     g_fun = yacas(expr)
     g_fun2 = eval(parse(text = paste("function(t){resp = ",g_fun$text,";return(resp)}",sep="")))
     res = try(g_fun2(quant), silent=TRUE)
-    if (class(res)=="try-error" | res < 0) stop("expr must be a non-negative decreasing function depending only on t")
+    if (is(res,"try-error") | res < 0) stop("expr must be a non-negative decreasing function depending only on t")
     if (!is.decreasing(g_fun2, x.bound=c(0,quant), step = 0.01)) stop ("expr must be a decreasing function")
 
     # Inverse function t = g*(y)
@@ -226,13 +230,13 @@ rtelliptical = function(n=1e4, mu=rep(0,length(lower)), Sigma=diag(length(lower)
     g_inv2 = eval(parse(text = paste("function(y){resp =",g_inv1,";return(resp)}",sep="")))
     res2 = try(g_inv2(res), silent=TRUE)
     conta = 2
-    while ((class(res2)=="try-error" | res2 < 0) & conta <= mre){
+    while ((is(res2,"try-error") | res2 < 0) & conta <= mre){
       g_inv1 = strsplit(g_inv$LinAlgForm, "==")[[conta]][2]
       g_inv2 = eval(parse(text = paste("function(y){resp =",g_inv1,";return(resp)}",sep="")))
       res2 = try(g_inv2(res), silent=TRUE)
       conta = conta + 1
     }
-    if (class(res2)=="try-error" | res2 < 0) stop ("The inverse of expr could not be computed. Try with gFun")
+    if (is(res2,"try-error") | res2 < 0) stop ("The inverse of expr could not be computed. Try with gFun")
 
     out = randomG(n, mu, Sigma, lower, upper, g_fun2, g_inv2, burn.in, thinning)
 

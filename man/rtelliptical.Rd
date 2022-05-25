@@ -14,16 +14,16 @@ rtelliptical(n = 10000, mu = rep(0, length(lower)),
 
 \item{mu}{numeric vector of length \eqn{p} representing the location parameter.}
 
-\item{Sigma}{numeric positive definite matrix with dimension \eqn{pxp} representing the
+\item{Sigma}{numeric positive definite matrix with dimension \eqn{p}x\eqn{p} representing the
 scale parameter.}
 
 \item{lower}{vector of lower truncation points of length \eqn{p}.}
 
 \item{upper}{vector of upper truncation points of length \eqn{p}.}
 
-\item{dist}{represents the truncated distribution to be used. The values are \code{Normal},
-\code{t}, \code{PE}, \code{PVII}, \code{Slash} and \code{CN} for the truncated Normal, Student-t,
-Power Exponential, Pearson VII, Slash and Contaminated Normal distributions, respectively.}
+\item{dist}{represents the truncated distribution to be used. The values are \code{'Normal'},
+\code{'t'}, \code{'PE'}, \code{'PVII'}, \code{'Slash'}, and \code{'CN'} for the truncated Normal, Student-t,
+Power Exponential, Pearson VII, Slash, and Contaminated Normal distribution, respectively.}
 
 \item{nu}{additional parameter or vector of parameters depending on the
 density generating function. See Details.}
@@ -40,7 +40,7 @@ density generating function. See Details.}
 \item{thinning}{factor for reducing the autocorrelation of random points.}
 }
 \value{
-It returns a matrix of dimensions \eqn{nxp} with the random points sampled.
+It returns a matrix of dimensions \eqn{n}x\eqn{p} with the random points sampled.
 }
 \description{
 This function generates observations from a truncated multivariate elliptical distribution
@@ -50,7 +50,7 @@ truncation points \code{lower} and \code{upper} via Slice Sampling algorithm wit
 \details{
 The \code{dist} argument represents the truncated distribution to be used. The values are
 \code{Normal}, \code{t}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the
-truncated Normal, Student-t, Power Exponential, Pearson VII, Slash and Contaminated Normal distributions,
+truncated Normal, Student-t, Power Exponential, Pearson VII, Slash, and Contaminated Normal distribution,
 respectively.
 
 The argument \code{nu} is a parameter or vector of parameters depending on the density generating
@@ -151,6 +151,10 @@ ggMarginal(f1, type="histogram", fill="grey")
   \insertRef{ho2012some}{relliptical}
 
   \insertRef{neal2003slice}{relliptical}
+
+  \insertRef{robert2010introducing}{relliptical}
+
+  \insertRef{valeriano2021moments}{relliptical}
 }
 }
 \seealso{

@@ -15,12 +15,12 @@ mvtelliptical(lower, upper = rep(Inf, length(lower)), mu = rep(0,
 
 \item{mu}{numeric vector of length \eqn{p} representing the location parameter.}
 
-\item{Sigma}{numeric positive definite matrix with dimension \eqn{pxp} representing the
+\item{Sigma}{numeric positive definite matrix with dimension \eqn{p}x\eqn{p} representing the
 scale parameter.}
 
-\item{dist}{represents the truncated distribution to be used. The values are \code{Normal},
-\code{t}, \code{PE}, \code{PVII}, \code{Slash} and \code{CN} for the truncated Normal, Student-t,
-Power Exponential, Pearson VII, Slash and Contaminated Normal distributions, respectively.}
+\item{dist}{represents the truncated distribution to be used. The values are \code{'Normal'},
+\code{'t'}, \code{'PE'}, \code{'PVII'}, \code{'Slash'}, and \code{'CN'} for the truncated Normal, Student-t,
+Power Exponential, Pearson VII, Slash, and Contaminated Normal distributions, respectively.}
 
 \item{nu}{additional parameter or vector of parameters depending on the
 density generating function. See Details.}
@@ -34,14 +34,14 @@ density generating function. See Details.}
 \value{
 It returns a list with three elements:
 \item{EY}{the mean vector of length \eqn{p}.}
-\item{EYY}{the second moment matrix of dimensions \eqn{pxp}.}
-\item{VarY}{the variance-covariance matrix of dimensions \eqn{pxp}.}
+\item{EYY}{the second moment matrix of dimensions \eqn{p}x\eqn{p}.}
+\item{VarY}{the variance-covariance matrix of dimensions \eqn{p}x\eqn{p}.}
 }
 \description{
 This function approximates the mean vector and variance-covariance matrix for some specific truncated elliptical distributions.
-The argument \code{dist} sets the distribution to be used and accepts the same values \code{Normal},
+The argument \code{dist} sets the distribution to be used and accepts the values \code{Normal},
 \code{t}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the truncated Normal, Student-t, Power Exponential,
-Pearson VII, Slash, and Contaminated Normal distributions, respectively. Moments are computed through Monte Carlo method for
+Pearson VII, Slash, and Contaminated Normal distribution, respectively. Moments are computed through Monte Carlo method for
 the truncated variables and using properties of the conditional expectation for the non-truncated variables.
 }
 \details{
@@ -93,9 +93,9 @@ MC32 = mvtelliptical(a, b, mu, Sigma, "Normal", n=1e6) # More precision
 {
   \insertRef{fang2018symmetric}{relliptical}
 
-  \insertRef{neal2003slice}{relliptical}
+  \insertRef{galarza2020moments}{relliptical}
 
-  \insertRef{robert2010introducing}{relliptical}
+  \insertRef{valeriano2021moments}{relliptical}
 }
 }
 \seealso{

@@ -1,19 +1,19 @@
 #' Mean and Variance for Truncated Multivariate Elliptical Distributions
 #'
 #' This function approximates the mean vector and variance-covariance matrix for some specific truncated elliptical distributions.
-#' The argument \code{dist} sets the distribution to be used and accepts the same values \code{Normal},
+#' The argument \code{dist} sets the distribution to be used and accepts the values \code{Normal},
 #' \code{t}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the truncated Normal, Student-t, Power Exponential,
-#' Pearson VII, Slash, and Contaminated Normal distributions, respectively. Moments are computed through Monte Carlo method for
+#' Pearson VII, Slash, and Contaminated Normal distribution, respectively. Moments are computed through Monte Carlo method for
 #' the truncated variables and using properties of the conditional expectation for the non-truncated variables.
 #'
 #' @param lower vector of lower truncation points of length \eqn{p}.
 #' @param upper vector of upper truncation points of length \eqn{p}.
 #' @param mu numeric vector of length \eqn{p} representing the location parameter.
-#' @param Sigma numeric positive definite matrix with dimension \eqn{pxp} representing the
+#' @param Sigma numeric positive definite matrix with dimension \eqn{p}x\eqn{p} representing the
 #' scale parameter.
-#' @param dist represents the truncated distribution to be used. The values are \code{Normal},
-#' \code{t}, \code{PE}, \code{PVII}, \code{Slash} and \code{CN} for the truncated Normal, Student-t,
-#' Power Exponential, Pearson VII, Slash and Contaminated Normal distributions, respectively.
+#' @param dist represents the truncated distribution to be used. The values are \code{'Normal'},
+#' \code{'t'}, \code{'PE'}, \code{'PVII'}, \code{'Slash'}, and \code{'CN'} for the truncated Normal, Student-t,
+#' Power Exponential, Pearson VII, Slash, and Contaminated Normal distributions, respectively.
 #' @param nu additional parameter or vector of parameters depending on the
 #' density generating function. See Details.
 #' @param n number of Monte Carlo samples to be generated.
@@ -37,8 +37,8 @@
 #'
 #' @return It returns a list with three elements:
 #' \item{EY}{the mean vector of length \eqn{p}.}
-#' \item{EYY}{the second moment matrix of dimensions \eqn{pxp}.}
-#' \item{VarY}{the variance-covariance matrix of dimensions \eqn{pxp}.}
+#' \item{EYY}{the second moment matrix of dimensions \eqn{p}x\eqn{p}.}
+#' \item{VarY}{the variance-covariance matrix of dimensions \eqn{p}x\eqn{p}.}
 #'
 #' @author Katherine L. Valeriano, Christian E. Galarza and Larissa A. Matos
 #'
@@ -74,14 +74,15 @@
 #' @references{
 #'   \insertRef{fang2018symmetric}{relliptical}
 #'
-#'   \insertRef{neal2003slice}{relliptical}
+#'   \insertRef{galarza2020moments}{relliptical}
 #'
-#'   \insertRef{robert2010introducing}{relliptical}
+#'   \insertRef{valeriano2021moments}{relliptical}
 #' }
 #'
 #' @import Ryacas0
 #' @importFrom FuzzyNumbers.Ext.2 is.decreasing
 #' @importFrom matrixcalc is.positive.definite is.symmetric.matrix
+#' @importFrom methods is
 #' @importFrom stats qchisq uniroot
 #' @importFrom Rdpack reprompt
 #'

@@ -12,6 +12,39 @@ static const double sqpii = sqrt(M_PI);
 
 // RANDOM NUMBER GENERATOR
 
+arma::umat indicatorFun(int p){
+  arma::umat minusM(p-1, p, fill::zeros);
+  for (int j=0; j<p; j++){
+    int k = 0;
+    for (int l=0; l<p; l++){
+      if (l!=j){
+        minusM(k,j) = l;
+        k++;
+      }
+    }
+  }
+  return minusM;
+}
+
+arma::vec generateXi(int p, arma::umat minus, arma::vec xa, arma::mat Rinv,
+                     arma::vec lower, arma::vec upper, double kap){
+  double mj, tj, lv, rv, xij;
+  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+
+  for (int j=0; j<p; j++){
+    pj = minus.col(j);
+    xj = xa(pj);
+    a1 = xj.t()*Rinv.rows(pj);
+    mj = -a1(j)/Rinv(j,j);
+    tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
+    lv = std::max(lower(j), (mj-tj));
+    rv = std::min(upper(j), (mj+tj));
+    xij  = lv + (rv - lv)*arma::randu<double>();
+    xa(j) = xij;
+  }
+  return xa;
+}
+
 // Generate random numbers from Truncated Multivariate Student's-t distribution t(mu,Sigma,nu; (a,b))
 // ------------------------------------------------------------------------------------------------------------
 // [[Rcpp::export]]
@@ -40,34 +73,14 @@ arma::mat rttrunc(int n, double nu, const arma::vec mu, const arma::mat Sigma,
   q1 = find_nonfinite(x);
   x.elem(q1) = upper.elem(q1);
 
-  arma::umat minusj(p-1, p, fill::zeros);
-  for (int j=0; j<p; j++){
-    int k = 0;
-    for (int l=0; l<p; l++){
-      if (l!=j){
-        minusj(k,j) = l;
-        k++;
-      }
-    }
-  }
-  double delta, y, kap, mj, tj, lv, rv, xij;
-  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+  double delta, y, kap;
+  arma::umat minusj = indicatorFun(p);
   int count = 1;
   for (int i=0; i<m; i++){
     delta = as_scalar(x.t()*Rinv*x);
     y = arma::randu<double>()*exp(-0.5*nup*log(1.0 + delta/nu));
     kap = nu*(exp((-2.0/nup)*log(y)) - 1.0);
-    for (int j=0; j<p; j++){
-      pj = minusj.col(j);
-      xj = x(pj);
-      a1 = xj.t()*Rinv.rows(pj);
-      mj = -a1(j)/Rinv(j,j);
-      tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
-      lv = std::max(lower(j), (mj-tj));
-      rv = std::min(upper(j), (mj+tj));
-      xij  = lv + (rv - lv)*arma::randu<double>();
-      x(j) = xij;
-    }
+    x = generateXi(p, minusj, x, Rinv, lower, upper, kap); // Simulate x
     if (i==(burn + count*lag - 1)){
       X.row(count-1) = x.t();
       count++;
@@ -109,33 +122,13 @@ arma::mat rtnormal(int n, const arma::vec mu, const arma::mat Sigma, const arma:
   q1 = find_nonfinite(x);
   x.elem(q1) = upper.elem(q1);
 
-  arma::umat minusj(p-1, p, fill::zeros);
-  for (int j=0; j<p; j++){
-    int k = 0;
-    for (int l=0; l<p; l++){
-      if (l!=j){
-        minusj(k,j) = l;
-        k++;
-      }
-    }
-  }
-  double delta, kap, mj, tj, lv, rv, xij;
-  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+  double delta, kap;
+  arma::umat minusj = indicatorFun(p);
   int count = 1;
   for (int i=0; i<m; i++){
     delta = as_scalar(x.t()*Rinv*x);
     kap   = -2.0*log(arma::randu<double>()) + delta;
-    for (int j=0; j<p; j++){
-      pj = minusj.col(j);
-      xj = x(pj);
-      a1 = xj.t()*Rinv.rows(pj);
-      mj = -a1(j)/Rinv(j,j);
-      tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
-      lv = std::max(lower(j), (mj-tj));
-      rv = std::min(upper(j), (mj+tj));
-      xij  = lv + (rv - lv)*arma::randu<double>();
-      x(j) = xij;
-    }
+    x = generateXi(p, minusj, x, Rinv, lower, upper, kap); // Simulate x
     if (i==(burn + count*lag - 1)){
       X.row(count-1) = x.t();
       count++;
@@ -169,34 +162,14 @@ arma::mat rtPE(int n, const double beta, const arma::vec mu, const arma::mat Sig
   x.elem(q1) = upper.elem(q1);
   x.replace(arma::datum::inf, 0.0);
 
-  arma::umat minusj(p-1, p, fill::zeros);
-  for (int j=0; j<p; j++){
-    int k = 0;
-    for (int l=0; l<p; l++){
-      if (l!=j){
-        minusj(k,j) = l;
-        k++;
-      }
-    }
-  }
-  double delta, y, kap, mj, tj, lv, rv, xij;
-  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+  double delta, y, kap;
+  arma::umat minusj = indicatorFun(p);
   int count = 1;
   for (int i=0; i<m; i++){
     delta = as_scalar(x.t()*Rinv*x);
     y   = -2.0*log(arma::randu<double>()) + exp(beta*log(delta));
     kap = exp((1.0/beta)*log(y));
-    for (int j=0; j<p; j++){
-      pj = minusj.col(j);
-      xj = x(pj);
-      a1 = xj.t()*Rinv.rows(pj);
-      mj = -a1(j)/Rinv(j,j);
-      tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
-      lv = std::max(lower(j), (mj-tj));
-      rv = std::min(upper(j), (mj+tj));
-      xij  = lv + (rv - lv)*arma::randu<double>();
-      x(j) = xij;
-    }
+    x = generateXi(p, minusj, x, Rinv, lower, upper, kap); // Simulate x
     if (i==(burn + count*lag - 1)){
       X.row(count-1) = x.t();
       count++;
@@ -240,34 +213,14 @@ arma::mat rtPVII(int n, const double N, const double nu, const arma::vec mu, con
   q1 = find_nonfinite(x);
   x.elem(q1)    = upper.elem(q1);
 
-  arma::umat minusj(p-1, p, fill::zeros);
-  for (int j=0; j<p; j++){
-    int k = 0;
-    for (int l=0; l<p; l++){
-      if (l!=j){
-        minusj(k,j) = l;
-        k++;
-      }
-    }
-  }
-  double delta, y, kap, mj, tj, lv, rv, xij;
-  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+  double delta, y, kap;
+  arma::umat minusj = indicatorFun(p);
   int count = 1;
   for (int i=0; i<m; i++){
     delta = as_scalar(x.t()*Rinv*x);
     y = arma::randu<double>()*exp(-N*log(1.0 + delta/nu));
     kap = nu*(exp((-1.0/N)*log(y)) - 1.0);
-    for (int j=0; j<p; j++){
-      pj = minusj.col(j);
-      xj = x(pj);
-      a1 = xj.t()*Rinv.rows(pj);
-      mj = -a1(j)/Rinv(j,j);
-      tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
-      lv = std::max(lower(j), (mj-tj));
-      rv = std::min(upper(j), (mj+tj));
-      xij  = lv + (rv - lv)*arma::randu<double>();
-      x(j) = xij;
-    }
+    x = generateXi(p, minusj, x, Rinv, lower, upper, kap); // Simulate x
     if (i==(burn + count*lag - 1)){
       X.row(count-1) = x.t();
       count++;
@@ -389,34 +342,14 @@ arma::mat rtslash(int n, const double nu, const arma::vec mu, const arma::mat Si
   x.elem(q1) = upper.elem(q1);
   x.replace(arma::datum::inf, 0.0);
 
-  arma::umat minusj(p-1, p, fill::zeros);
-  for (int j=0; j<p; j++){
-    int k = 0;
-    for (int l=0; l<p; l++){
-      if (l!=j){
-        minusj(k,j) = l;
-        k++;
-      }
-    }
-  }
-  double delta, y, kap, mj, tj, lv, rv, xij;
-  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+  double delta, y, kap;
+  arma::umat minusj = indicatorFun(p);
   int count = 1;
   for (int i=0; i<m; i++){
     delta = as_scalar(x.t()*Rinv*x);
     y   = arma::randu<double>()*slash_g(delta, nu, p);
     kap = BrentMethod(y, nu, p);
-    for (int j=0; j<p; j++){
-      pj = minusj.col(j);
-      xj = x(pj);
-      a1 = xj.t()*Rinv.rows(pj);
-      mj = -a1(j)/Rinv(j,j);
-      tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
-      lv = std::max(lower(j), (mj-tj));
-      rv = std::min(upper(j), (mj+tj));
-      xij  = lv + (rv - lv)*arma::randu<double>();
-      x(j) = xij;
-    }
+    x = generateXi(p, minusj, x, Rinv, lower, upper, kap); // Simulate x
     if (i==(burn + count*lag - 1)){
       X.row(count-1) = x.t();
       count++;
@@ -463,35 +396,15 @@ arma::mat rtCN(int n, const double nu, const double rho, const arma::vec mu, con
   x.elem(q1)    = upper.elem(q1);
   x.replace(arma::datum::inf, 0.0);
 
-  arma::umat minusj(p-1, p, fill::zeros);
-  for (int j=0; j<p; j++){
-    int k = 0;
-    for (int l=0; l<p; l++){
-      if (l!=j){
-        minusj(k,j) = l;
-        k++;
-      }
-    }
-  }
-  double delta, dgf, y, kap, mj, tj, lv, rv, xij;
-  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+  double delta, dgf, y, kap;
+  arma::umat minusj = indicatorFun(p);
   int count = 1;
   for (int i=0; i<m; i++){
     delta = as_scalar(x.t()*Rinv*x);
     dgf   = nu*pow(rho, (0.5*p))*exp(-0.5*rho*delta) + (1.0-nu)*exp(-0.5*delta);
     y     = arma::randu<double>()*(dgf);
     kap   = ginvCN(nu, rho, p, y);
-    for (int j=0; j<p; j++){
-      pj = minusj.col(j);
-      xj = x(pj);
-      a1 = xj.t()*Rinv.rows(pj);
-      mj = -a1(j)/Rinv(j,j);
-      tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
-      lv = std::max(lower(j), (mj-tj));
-      rv = std::min(upper(j), (mj+tj));
-      xij  = lv + (rv - lv)*arma::randu<double>();
-      x(j) = xij;
-    }
+    x = generateXi(p, minusj, x, Rinv, lower, upper, kap); // Simulate x
     if (i==(burn + count*lag - 1)){
       X.row(count-1) = x.t();
       count++;
@@ -525,34 +438,14 @@ arma::mat randomG(int n, arma::vec mu, arma::mat Sigma, arma::vec a, arma::vec b
   x.elem(q1)    = upper.elem(q1);
   x.replace(arma::datum::inf, 0.0);
 
-  arma::umat minusj(p-1, p, fill::zeros);
-  for (int j=0; j<p; j++){
-    int k = 0;
-    for (int l=0; l<p; l++){
-      if (l!=j){
-        minusj(k,j) = l;
-        k++;
-      }
-    }
-  }
-  double delta, y, kap, mj, tj, lv, rv, xij;
-  arma::uvec pj; arma::rowvec a1; arma::vec xj;
+  double delta, y, kap;
+  arma::umat minusj = indicatorFun(p);
   int count = 1;
   for (int i=0; i<m; i++){
     delta = as_scalar(x.t()*Rinv*x);
     y   = arma::randu<double>()*as<double>(gFUN(delta));
     kap = as<double>(ginvFUN(y));
-    for (int j=0; j<p; j++){
-      pj = minusj.col(j);
-      xj = x(pj);
-      a1 = xj.t()*Rinv.rows(pj);
-      mj = -a1(j)/Rinv(j,j);
-      tj = sqrt(mj*mj + (kap - as_scalar(a1.cols(pj)*xj))/Rinv(j,j));
-      lv = std::max(lower(j), (mj-tj));
-      rv = std::min(upper(j), (mj+tj));
-      xij  = lv + (rv - lv)*arma::randu<double>();
-      x(j) = xij;
-    }
+    x = generateXi(p, minusj, x, Rinv, lower, upper, kap); // Simulate x
     if (i==(burn + count*lag - 1)){
       X.row(count-1) = x.t();
       count++;

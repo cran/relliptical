@@ -9,7 +9,8 @@ such as the truncated versions of the Normal, Student-t, Pearson VII,
 Slash, Logistic, Kotz-type, among others. Particular distributions can
 be provided by specifying the density generating function. It also
 computes the first two moments (covariance matrix as well) for some
-particular distributions.
+particular distributions. For more details see (Valeriano, Galarza, and
+Matos 2021).
 
 Next, we will show the functions available in the package.
 
@@ -82,7 +83,7 @@ message is returned).
 The following example draws random variates from a truncated bivariate
 Logistic distribution, whose DGF is given by
 *g*(*t*) = *e*<sup>−*t*</sup>/(1+*e*<sup>−*t*</sup>)<sup>2</sup>, *t* ≥ 0,
-see (Fang 2018).
+see (Fang, Kotz, and Ng 2018).
 
 ``` r
 # Sampling from the Truncated Logistic distribution
@@ -116,7 +117,7 @@ distribution, whose DGF is given by
 *g*(*t*) = *t*<sup>*N* − 1</sup>*e*<sup>−*r**t*<sup>*s*</sup></sup>,  *t* ≥ 0,  *r* \> 0,  *s* \> 0,  2*N* + *p* \> 2.
 
 As required, this function is strictly decreasing when
-(2−*p*)/2 \< *N* ≤ 1, see (Fang 2018).
+(2−*p*)/2 \< *N* ≤ 1, see (Fang, Kotz, and Ng 2018).
 
 ``` r
 # Sampling from the Truncated Kotz-type distribution
@@ -243,9 +244,9 @@ As seen for the first scenario, some elements of the variance-covariance
 matrix are shown as `NaN`. Those are the cases where the moment does not
 exist (yes, some elements of the variance-covariance matrix may exist
 and others may not). It is well know that for a Student-t distribution
-its second moment exist if *ν* \> 2, however, as studied by (Galarza,
-Matos, and Lachos 2020), this condition is relaxed as the number of
-dimensions containing only finite truncation limits increases.
+its second moment exist if *ν* \> 2, however, as studied by (Galarza et
+al. 2022), this condition is relaxed as the number of dimensions
+containing only finite truncation limits increases.
 
 It is worth mention that the Student-t distribution with *ν* \> 0
 degrees of freedom is a particular case of the Pearson VII distribution
@@ -290,30 +291,40 @@ mvtelliptical(a, b, mu, Sigma, "PVII", c(1.90,0.80), n=1e6) # n=1e6 more precisi
 
 <div id="ref-fang2018symmetric" class="csl-entry">
 
-Fang, Kai Wang. 2018. *Symmetric Multivariate and Related
-Distributions*. CRC Press.
+Fang, K. T., S. Kotz, and K. W. Ng. 2018. *Symmetric Multivariate and
+Related Distributions*. Chapman; Hall/CRC.
 
 </div>
 
 <div id="ref-galarza2020moments" class="csl-entry">
 
-Galarza, Christian E, Larissa A Matos, and Victor H Lachos. 2020.
+Galarza, C. E., L. A. Matos, L. M. Castro, and V. H. Lachos. 2022.
 “Moments of the Doubly Truncated Selection Elliptical Distributions with
-Emphasis on the Unified Multivariate Skew-*t* Distribution.” *arXiv
-Preprint arXiv:2007.14980*.
+Emphasis on the Unified Multivariate Skew-t Distribution.” *Journal of
+Multivariate Analysis* 189: 104944.
+<https://doi.org/10.1016/j.jmva.2021.104944>.
 
 </div>
 
 <div id="ref-neal2003slice" class="csl-entry">
 
-Neal, Radford M. 2003. “Slice Sampling.” *Annals of Statistics*, 705–41.
+Neal, R. M. 2003. “Slice Sampling.” *Annals of Statistics*, 705–41.
 
 </div>
 
 <div id="ref-robert2010introducing" class="csl-entry">
 
-Robert, Christian P, and George Casella. 2010. *Introducing Monte Carlo
-Methods with r*. Vol. 18. Springer.
+Robert, C. P., and G. Casella. 2010. *Introducing <span
+class="nocase">Monte Carlo Methods with R</span>*. Vol. 18. New York:
+Springer.
+
+</div>
+
+<div id="ref-valeriano2021moments" class="csl-entry">
+
+Valeriano, K. A., C. E. Galarza, and L. A. Matos. 2021. “Moments and
+Random Number Generation for the Truncated Elliptical Family of
+Distributions.” *arXiv Preprint arXiv:2112.09319*.
 
 </div>
 
