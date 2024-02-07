@@ -5,12 +5,12 @@
 
 The `relliptical R` package offers random numbers generation from
 members of the truncated multivariate elliptical family of distribution
-such as the truncated versions of the Normal, Student-t, Pearson VII,
-Slash, Logistic, Kotz-type, among others. Particular distributions can
-be provided by specifying the density generating function. It also
-computes the first two moments (covariance matrix as well) for some
-particular distributions. For more details see (Valeriano, Galarza, and
-Matos 2021).
+such as the truncated versions of the Normal, Student-t, Laplace,
+Pearson VII, Slash, Logistic, Kotz-type, among others. Particular
+distributions can be provided by specifying the density generating
+function. It also computes the first two moments (covariance matrix as
+well) for some particular distributions. For more details see
+(Valeriano, Galarza, and Matos 2023).
 
 Next, we will show the functions available in the package.
 
@@ -21,13 +21,13 @@ multivariate elliptical distribution with location parameter `mu`, scale
 matrix `Sigma`, lower and upper truncation points `lower` and `upper`
 via Slice Sampling algorithm (Neal 2003) with Gibbs sampler (Robert and
 Casella 2010) steps. The `dist` argument represents the truncated
-distribution to be used. The values are `Normal`, `t`, `PE`, `PVII`,
-`Slash`, and `CN`, for the truncated Normal, Student-t, Power
-Exponential, Pearson VII, Slash, and Contaminated Normal distributions,
-respectively.
+distribution to be used. The values are `Normal`, `t`, `Laplace`, `PE`,
+`PVII`, `Slash`, and `CN`, for the truncated Normal, Student-t, Laplace,
+Power Exponential, Pearson VII, Slash, and Contaminated Normal
+distributions, respectively.
 
-In the following example, we generate *n* = 10<sup>5</sup> samples from
-the truncated bivariate Normal distribution.
+In the following example, we generate $n = 10^5$ samples from the
+truncated bivariate Normal distribution.
 
 ``` r
 library(relliptical)
@@ -51,39 +51,38 @@ head(sample1)
 library(ggplot2)
 # Histogram and density for variable 1
 f1 = ggplot(data.frame(sample1), aes(x=X1)) + 
-  geom_histogram(aes(y=..density..), colour="black", fill="grey", bins=15) +
-  geom_density(colour="red") + labs(x=bquote(X[1]), y="Density")
+  geom_histogram(aes(y=after_stat(density)), colour="black", fill="grey", bins=15) +
+  geom_density(colour="red") + labs(x=bquote(X[1]), y="Density") + theme_bw()
 
 # Histogram and density for variable 2
 f2 = ggplot(data.frame(sample1), aes(x=X2)) + 
-  geom_histogram(aes(y=..density..), colour="black", fill="grey", bins=15) +
-  geom_density(colour="red") + labs(x=bquote(X[2]), y="Density")
+  geom_histogram(aes(y=after_stat(density)), colour="black", fill="grey", bins=15) +
+  geom_density(colour="red") + labs(x=bquote(X[2]), y="Density") + theme_bw()
 
 library(gridExtra)
 grid.arrange(f1, f2, nrow=1)
 ```
 
-<img src="man/figures/README-example1-1.png" width="100%" />
+<img src="man/figures/README-example1-1.png" width="65%" style="display: block; margin: auto;" />
 
 This function also allows generating random numbers from other truncated
 elliptical distributions not specified in the `dist` argument, by
 supplying the density generating function (DGF) through arguments either
 `expr` or `gFun`. The DGF must be a non-negative and strictly decreasing
-function on (0,∞). The easiest way is to provide the DGF expression to
-argument `expr` as a character. The notation used in `expr` needs to be
-understood by package `Ryacas0` and the environment of `R`. For
-instance, for the DGF *g*(*t*) = *e*<sup>−*t*</sup>, the user must
-provide `expr = "exp(1)^(-t)"`. See that the function must depend only
-on variable *t*, and any additional parameter must be passed as a fixed
+function on $(0, \infty)$. The easiest way is to provide the DGF
+expression to argument `expr` as a character. The notation used in
+`expr` needs to be understood by package `Ryacas0` and the environment
+of `R`. For instance, for the DGF $g(t)=e^{-t}$, the user must provide
+`expr = "exp(1)^(-t)"`. See that the function must depend only on
+variable $t$, and any additional parameter must be passed as a fixed
 value. For this case, when a character expression is provided to `expr`,
 the algorithm tries to compute a closed-form expression for the inverse
-function of *g*(*t*), however, this is not always possible (a warning
+function of $g(t)$, however, this is not always possible (a warning
 message is returned).
 
 The following example draws random variates from a truncated bivariate
 Logistic distribution, whose DGF is given by
-*g*(*t*) = *e*<sup>−*t*</sup>/(1+*e*<sup>−*t*</sup>)<sup>2</sup>, *t* ≥ 0,
-see (Fang, Kotz, and Ng 2018).
+$g(t) = e^{-t}/(1+e^{-t})^2, t \geq 0$, see (Fang, Kotz, and Ng 2018).
 
 ``` r
 # Sampling from the Truncated Logistic distribution
@@ -114,10 +113,10 @@ provided, arguments `dist` and `expr` are ignored.
 In the next example, we will draw samples from the truncated Kotz-type
 distribution, whose DGF is given by
 
-*g*(*t*) = *t*<sup>*N* − 1</sup>*e*<sup>−*r**t*<sup>*s*</sup></sup>,  *t* ≥ 0,  *r* \> 0,  *s* \> 0,  2*N* + *p* \> 2.
+$$g(t) = t^{N-1} e^{-r t^s}, \quad t\geq 0, \quad r>0, \quad s>0, \quad 2N+p>2.$$
 
 As required, this function is strictly decreasing when
-(2−*p*)/2 \< *N* ≤ 1, see (Fang, Kotz, and Ng 2018).
+$(2-p)/2 < N \leq 1$, see (Fang, Kotz, and Ng 2018).
 
 ``` r
 # Sampling from the Truncated Kotz-type distribution
@@ -128,35 +127,23 @@ lower = c(-2, -2)
 upper = c(3, 2)
 sample4 = rtelliptical(n=1e4, mu, Sigma, lower, upper, gFun=function(t){ t^(-1/2)*exp(-2*t^(1/4)) })
 f1 = ggplot(data.frame(sample4), aes(x=X1, y=X2)) + geom_point(size=0.50) +
-     labs(x=expression(X[1]), y=expression(X[2]), subtitle="Kotz(2,1/4,1/2)")
+     labs(x=expression(X[1]), y=expression(X[2]), subtitle="Kotz(2,1/4,1/2)") + theme_bw()
 
 library(ggExtra)
 ggMarginal(f1, type="histogram", fill="grey")
 ```
 
-<img src="man/figures/README-example3-1.png" width="100%" />
+<img src="man/figures/README-example3-1.png" width="65%" style="display: block; margin: auto;" />
 
 Since the generating process uses an MCMC method, observations will be
 correlated, so it may be of interest to study some ACF plots. Now, we
 study the sample from the bivariate logistic distribution.
 
 ``` r
-# Function for plotting the sample autocorrelation using ggplot2
-acf.plot = function(samples){
-  p = ncol(samples);   n = nrow(samples);   acf1 = list(p)
-  for (i in 1:p){
-    bacfdf = with(acf(samples[,i], plot=FALSE), data.frame(lag, acf))
-    acf1[[i]] = ggplot(data=bacfdf, aes(x=lag,y=acf)) + geom_hline(aes(yintercept=0)) +
-      geom_segment(aes(xend=lag, yend=0)) + labs(x="Lag", y="ACF", subtitle=bquote(X[.(i)])) +
-      geom_hline(yintercept=c(qnorm(0.975)/sqrt(n),-qnorm(0.975)/sqrt(n)), colour="red", linetype="twodash")
-  }
-  return (acf1)
-}
-
 grid.arrange(grobs=acf.plot(sample2), top="Sample ACF with no thinning", nrow=1)
 ```
 
-<img src="man/figures/README-example2.0-1.png" width="100%" />
+<img src="man/figures/README-example2.0-1.png" width="65%" style="display: block; margin: auto;" />
 
 Autocorrelation can be decimated by setting the `thinning` argument. The
 thinning factor reduces the autocorrelation of the random points in the
@@ -172,20 +159,21 @@ sample3 = rtelliptical(n=1e4, mu, Sigma, lower, upper, dist=NULL, expr="exp(1)^(
 grid.arrange(grobs=acf.plot(sample3), top="Sample ACF with thinning = 3", nrow=1)
 ```
 
-<img src="man/figures/README-example2.1-1.png" width="100%" />
+<img src="man/figures/README-example2.1-1.png" width="65%" style="display: block; margin: auto;" />
 
 ## Mean and variance-covariance matrix
 
 For this purpose, we call the function `mvtelliptical()`, which returns
 the mean vector and variance-covariance matrix for some specific
 truncated elliptical distributions. The argument `dist` sets the
-distribution to be used and accepts the same values `Normal`, `t`, `PE`,
-`PVII`, `Slash`, and `CN` as before. Moments are computed through Monte
-Carlo method for the truncated variables and using properties of the
-conditional expectation for the non-truncated variables.
+distribution to be used and accepts the same values `Normal`, `t`,
+`Laplace`, `PE`, `PVII`, `Slash`, and `CN` as before. Moments are
+computed through Monte Carlo method for the truncated variables and
+using properties of the conditional expectation for the non-truncated
+variables.
 
-Next, we compute the moments for a random variable *X* following a
-truncated 3-variate Student-t distribution with *ν* = 0.8 degrees of
+Next, we compute the moments for a random variable $X$ following a
+truncated 3-variate Student-t distribution with $\nu=0.8$ degrees of
 freedom. We will consider two scenarios: a first one with only one
 doubly truncated variable, and a second one with two doubly truncated
 variables.
@@ -193,9 +181,10 @@ variables.
 ``` r
 # Truncated Student-t distribution
 set.seed(5678)
-mu = c(0.1, 0.2, 0.3)
+mu    = c(0.1, 0.2, 0.3)
 Sigma = matrix(data = c(1,0.2,0.3,0.2,1,0.4,0.3,0.4,1), nrow=length(mu), ncol=length(mu), byrow=TRUE)
-# Example 1: considering nu = 0.80 and one doubly truncated variable
+
+# Example 1: one doubly truncated student-t (nu = 0.80)
 a = c(-0.8, -Inf, -Inf)
 b = c(0.5, 0.6, Inf)
 mvtelliptical(a, b, mu, Sigma, "t", 0.80)
@@ -244,25 +233,26 @@ As seen for the first scenario, some elements of the variance-covariance
 matrix are shown as `NaN`. Those are the cases where the moment does not
 exist (yes, some elements of the variance-covariance matrix may exist
 and others may not). It is well know that for a Student-t distribution
-its second moment exist if *ν* \> 2, however, as studied by (Galarza et
+its second moment exist if $\nu>2$, however, as studied by (Galarza et
 al. 2022), this condition is relaxed as the number of dimensions
 containing only finite truncation limits increases.
 
-It is worth mention that the Student-t distribution with *ν* \> 0
+It is worth mention that the Student-$t$ distribution with $\nu > 0$
 degrees of freedom is a particular case of the Pearson VII distribution
-with parameters *m* \> *p*/2 and *ν*<sup>\*</sup> \> 0 when
-*m* = (*ν*+*p*)/2 and *ν*<sup>\*</sup> = *ν*.
+with parameters $m > p/2$ and $\nu^* > 0$ when $m = (\nu+p)/2$ and
+$\nu^* = \nu$.
 
-Finally, for comparison purposes, we compute the moments for a truncated
-Pearson VII distribution with parameters *ν*<sup>\*</sup> = *ν* = 0.80
-and *m* = (*ν*+3)/2 = 1.90, which is equivalent to the Student-t
-distribution above, and their moments must be nearly equal.
+Finally, for comparison purposes, we compute the moments for a doubly
+truncated Pearson VII distribution with parameters $\nu^* = \nu = 0.80$
+and $m = (\nu + 3)/2 = 1.90$, which is equivalent to the Student-t
+distribution mentioned above. Therefore, their moments should be nearly
+equal.
 
 ``` r
 # Truncated Pearson VII distribution
 set.seed(9876)
-a = c(-0.8, -0.70, -Inf)
-b = c(0.5, 0.6, Inf)
+a  = c(-0.8, -0.70, -Inf)
+b  = c(0.5, 0.6, Inf)
 mu = c(0.1, 0.2, 0.3)
 Sigma = matrix(data = c(1,0.2,0.3,0.2,1,0.4,0.3,0.4,1), nrow=length(mu), ncol=length(mu), byrow=TRUE)
 mvtelliptical(a, b, mu, Sigma, "PVII", c(1.90,0.80), n=1e6) # n=1e6 more precision
@@ -314,17 +304,17 @@ Neal, R. M. 2003. “Slice Sampling.” *Annals of Statistics*, 705–41.
 
 <div id="ref-robert2010introducing" class="csl-entry">
 
-Robert, C. P., and G. Casella. 2010. *Introducing <span
-class="nocase">Monte Carlo Methods with R</span>*. Vol. 18. New York:
-Springer.
+Robert, C. P., and G. Casella. 2010. *Introducing
+<span class="nocase">Monte Carlo Methods with R</span>*. Vol. 18. New
+York: Springer.
 
 </div>
 
-<div id="ref-valeriano2021moments" class="csl-entry">
+<div id="ref-valeriano2023moments" class="csl-entry">
 
-Valeriano, K. A., C. E. Galarza, and L. A. Matos. 2021. “Moments and
-Random Number Generation for the Truncated Elliptical Family of
-Distributions.” *arXiv Preprint arXiv:2112.09319*.
+Valeriano, Katherine A. L., Christian E. Galarza, and Larissa A. Matos.
+2023. “Moments and Random Number Generation for the Truncated Elliptical
+Family of Distributions.” *Statistics and Computing* 33 (1): 32.
 
 </div>
 

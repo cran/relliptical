@@ -19,8 +19,8 @@ mvtelliptical(lower, upper = rep(Inf, length(lower)), mu = rep(0,
 scale parameter.}
 
 \item{dist}{represents the truncated distribution to be used. The values are \code{'Normal'},
-\code{'t'}, \code{'PE'}, \code{'PVII'}, \code{'Slash'}, and \code{'CN'} for the truncated Normal, Student-t,
-Power Exponential, Pearson VII, Slash, and Contaminated Normal distributions, respectively.}
+\code{'t'}, \code{'Laplace'}, \code{'PE'}, \code{'PVII'}, \code{'Slash'}, and \code{'CN'} for the truncated Normal, Student-t,
+Laplace, Power Exponential, Pearson VII, Slash, and Contaminated Normal distributions, respectively.}
 
 \item{nu}{additional parameter or vector of parameters depending on the
 density generating function. See Details.}
@@ -40,7 +40,7 @@ It returns a list with three elements:
 \description{
 This function approximates the mean vector and variance-covariance matrix for some specific truncated elliptical distributions.
 The argument \code{dist} sets the distribution to be used and accepts the values \code{Normal},
-\code{t}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the truncated Normal, Student-t, Power Exponential,
+\code{t}, \code{Laplace}, \code{PE}, \code{PVII}, \code{Slash}, and \code{CN}, for the truncated Normal, Student-t, Power Exponential,
 Pearson VII, Slash, and Contaminated Normal distribution, respectively. Moments are computed through Monte Carlo method for
 the truncated variables and using properties of the conditional expectation for the non-truncated variables.
 }
@@ -68,14 +68,13 @@ mu = c(0.1, 0.2, 0.3)
 Sigma = matrix(data = c(1,0.2,0.3,0.2,1,0.4,0.3,0.4,1), nrow=length(mu),
                ncol=length(mu), byrow=TRUE)
 
-# Example 1: considering nu = 0.80 and one doubly truncated variable
+# Example 1: one doubly truncated student-t (nu = 0.80) and Laplace
 a = c(-0.8, -Inf, -Inf)
 b = c(0.5, 0.6, Inf)
-MC11 = mvtelliptical(a, b, mu, Sigma, "t", 0.80)
+MC11 = mvtelliptical(a, b, mu, Sigma, "t", 0.80) # Student-t
+MC12 = mvtelliptical(a, b, mu, Sigma, "Laplace") # Laplace
 
-# Example 2: considering nu = 0.80 and two doubly truncated variables
-a = c(-0.8, -0.70, -Inf)
-b = c(0.5, 0.6, Inf)
+# Example 2: two doubly truncated student-t (nu = 0.80)
 MC12 = mvtelliptical(a, b, mu, Sigma, "t", 0.80) # By default n=1e4
 
 # Truncated Pearson VII distribution
@@ -95,7 +94,7 @@ MC32 = mvtelliptical(a, b, mu, Sigma, "Normal", n=1e6) # More precision
 
   \insertRef{galarza2020moments}{relliptical}
 
-  \insertRef{valeriano2021moments}{relliptical}
+  \insertRef{valeriano2023moments}{relliptical}
 }
 }
 \seealso{
